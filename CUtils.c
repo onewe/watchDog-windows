@@ -18,19 +18,6 @@ TCHAR *  GetFullDir() {
 
 
 BOOL InitLog() {
-	TCHAR * currentDir = GetFullDir();
-	TCHAR * logPath = _tcscat(currentDir,_T(LOG_PATH));
-	if (_taccess(logPath, 0) != 0) {
-		_ftprintf(stderr,_T("logs日志目录不存在!\n"));
-		return FALSE;
-	}
-	TCHAR * logFilePath = _tcscat(currentDir, _T(LOG_FILE_PATH));
-	FILE * log_file = _tfreopen(logFilePath, _T("w+"), stdout);
-	if (log_file == NULL) {
-		_ftprintf(stderr,_T("打开日志文件失败!程序读取到路径为:%s\n"), logFilePath);
-		return FALSE;
-	}
-
 	//关闭printf的buff
 	setbuf(stdout, NULL);
 	//初始化日志
@@ -43,7 +30,6 @@ BOOL InitLog() {
 	elog_set_fmt(ELOG_LVL_VERBOSE, ELOG_FMT_ALL & ~ELOG_FMT_FUNC);
 	/* start EasyLogger */
 	elog_start();
-	free(logFilePath);
 	return TRUE;
 }
 

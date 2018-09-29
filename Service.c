@@ -33,7 +33,7 @@ BOOL InstallService() {
 	log_i("安装服务中...");
 	if (IsInstalled()) {
 		log_i("服务已安装...");
-		return TRUE;
+		return FALSE;
 	}
 
 	//打开服务控制器

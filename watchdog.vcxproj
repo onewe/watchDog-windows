@@ -83,8 +83,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Administrator\source\repos\watchdog\watchdog\lib\cjson;C:\Users\Administrator\source\repos\watchdog\watchdog\lib\pthreads\Pre-built.2\include;C:\Users\Administrator\source\repos\watchdog\watchdog\lib\easylogger\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Administrator\source\repos\watchdog\watchdog\lib\pthreads\Pre-built.2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Administrator\source\repos\watchdog\watchdog\lib\cjson;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,7 +134,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;HAVE_STRUCT_TIMESPEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -142,18 +142,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CUtils.c" />
     <ClCompile Include="lib\cjson\cJSON.c" />
     <ClCompile Include="lib\cjson\cJSON_Utils.c" />
-    <ClCompile Include="lib\easylogger\port\elog_port.c" />
-    <ClCompile Include="lib\easylogger\src\elog.c" />
-    <ClCompile Include="lib\easylogger\src\elog_async.c" />
-    <ClCompile Include="lib\easylogger\src\elog_buf.c" />
-    <ClCompile Include="lib\easylogger\src\elog_utils.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Service.c" />
     <ClCompile Include="watchDogService.c" />
@@ -166,8 +161,6 @@
     <ClInclude Include="CUtils.h" />
     <ClInclude Include="lib\cjson\cJSON.h" />
     <ClInclude Include="lib\cjson\cJSON_Utils.h" />
-    <ClInclude Include="lib\easylogger\inc\elog.h" />
-    <ClInclude Include="lib\easylogger\inc\elog_cfg.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="watchDogService.h" />
   </ItemGroup>

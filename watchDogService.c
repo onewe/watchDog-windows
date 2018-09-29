@@ -40,7 +40,7 @@ void WINAPI ServiceMain(DWORD argc, PWSTR* argv) {
 	//设置服务状态
 	ServiceStatus.dwCurrentState = SERVICE_RUNNING;
 	SetServiceStatus(hStatus, &ServiceStatus);
-
+	
 	Run();
 
 	//停止服务
