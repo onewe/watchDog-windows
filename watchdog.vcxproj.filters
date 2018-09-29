@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\cjson">
+      <UniqueIdentifier>{2b381205-6fde-468d-8d4a-61c376ef0f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\cjson">
+      <UniqueIdentifier>{7fab28f0-4e95-4797-a909-21880b89c3b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\utils">
+      <UniqueIdentifier>{1a275d8c-9deb-4062-92ae-ab54fadd92f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\utils">
+      <UniqueIdentifier>{3c19821d-6a7c-4c3a-a9d4-97306e5617d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\easylogger">
+      <UniqueIdentifier>{eb06001a-d2b4-413f-8f54-41e26eff1b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\easylogger">
+      <UniqueIdentifier>{a8eab888-bd63-4280-b38c-69f4afb0991a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\easylogger\src">
+      <UniqueIdentifier>{448a3c6e-632c-44dc-a1ad-2fa331d0d866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\easylogger\port">
+      <UniqueIdentifier>{cbe80262-4203-4e27-86bb-8fe898d586a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\easylogger\inc">
+      <UniqueIdentifier>{5150eed7-b498-47ae-b61e-a358f10a2e2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\services">
+      <UniqueIdentifier>{d450c2b8-6f3a-49fa-a3de-a4ac6f2ce335}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\services">
+      <UniqueIdentifier>{28f73588-d390-401d-8352-36ad97f1bc01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\common">
+      <UniqueIdentifier>{4cdfb844-e844-438a-8190-13e07cdef9a6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\cjson\cJSON_Utils.c">
+      <Filter>源文件\cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\cjson\cJSON.c">
+      <Filter>源文件\cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="CUtils.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\easylogger\src\elog_buf.c">
+      <Filter>源文件\easylogger\src</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\easylogger\src\elog.c">
+      <Filter>源文件\easylogger\src</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\easylogger\src\elog_async.c">
+      <Filter>源文件\easylogger\src</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\easylogger\src\elog_utils.c">
+      <Filter>源文件\easylogger\src</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\easylogger\port\elog_port.c">
+      <Filter>源文件\easylogger\port</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="watchDogService.c">
+      <Filter>源文件\services</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="conf\config.json">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\cjson\cJSON_Utils.h">
+      <Filter>头文件\cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\cjson\cJSON.h">
+      <Filter>头文件\cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="CUtils.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\easylogger\inc\elog_cfg.h">
+      <Filter>头文件\easylogger\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\easylogger\inc\elog.h">
+      <Filter>头文件\easylogger\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="watchDogService.h">
+      <Filter>头文件\services</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>头文件\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
