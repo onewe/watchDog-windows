@@ -34,6 +34,12 @@
     <Filter Include="头文件\common">
       <UniqueIdentifier>{4cdfb844-e844-438a-8190-13e07cdef9a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\logger">
+      <UniqueIdentifier>{a065f7d9-ed2a-4f94-a428-c879e7265b57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\logger">
+      <UniqueIdentifier>{b1f16aec-3d76-477c-8d06-2386e99f9026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -53,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="watchDogService.c">
       <Filter>源文件\services</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.c">
+      <Filter>源文件\logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +87,9 @@
     </ClInclude>
     <ClInclude Include="common.h">
       <Filter>头文件\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>头文件\logger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

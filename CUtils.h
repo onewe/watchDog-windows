@@ -1,3 +1,5 @@
+#ifndef CUTILS_H
+#define CUTILS_H
 #include "common.h"
 
 //获取本程序完整路径
@@ -10,3 +12,5 @@ BOOL InitLog();
 wchar_t * CharToWchar(char *);
 //宽字符转窄字符
 char * WCharToChar(wchar_t *);
+
+#endif // !CUTILS_h

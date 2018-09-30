@@ -1,4 +1,6 @@
 #include "watchDogService.h"
+#define LOG_TAG L"watchDogService"
+#include "Logger.h"
 
 
 
@@ -33,7 +35,7 @@ void WINAPI ServiceMain(DWORD argc, PWSTR* argv) {
 	if (!hStatus)
 	{
 		DWORD dwError = GetLastError();
-		log_e("启动服务失败!%d\n", dwError);
+		log_e(_T("启动服务失败!%d\n"), dwError);
 		return;
 	}
 
@@ -54,13 +56,13 @@ void WINAPI ServiceCtrlHandler(DWORD fdwControl)
 {
 	switch (fdwControl) {
 	case SERVICE_CONTROL_STOP:
-		log_i("WatchDog 服务停止...\n");
+		log_i(_T("WatchDog 服务停止...\n"));
 		ServiceStatus.dwCurrentState = SERVICE_STOPPED;
 		ServiceStatus.dwWin32ExitCode = 0;
 		SetServiceStatus(hStatus, &ServiceStatus);
 		break;
 	case SERVICE_CONTROL_SHUTDOWN:
-		log_i("WatchDog 服务终止...\n");
+		log_i(_T("WatchDog 服务终止...\n"));
 		ServiceStatus.dwCurrentState = SERVICE_STOPPED;
 		ServiceStatus.dwWin32ExitCode = 0;
 		SetServiceStatus(hStatus, &ServiceStatus);
@@ -72,13 +74,13 @@ void WINAPI ServiceCtrlHandler(DWORD fdwControl)
 
 //运行指定程序
 void Run() {
-	log_i("服务调用成功!");
+	log_i(_T("服务调用成功!\n"));
 	wchar_t * commandLine = ParseConfForCmd();
 	BOOL flag = createProcess(commandLine);
 	if (TRUE) {
 		DogFood * dogFood = CreateDogFood();
 		if (dogFood == NULL) {
-			log_e("狗粮生产失败!");
+			log_e(_T("狗粮生产失败!\n"));
 		}
 		else {
 			//看门
@@ -86,9 +88,9 @@ void Run() {
 		}
 	}
 	else {
-		log_e("程序启动失败!\n");
+		log_e(_T("程序启动失败!\n"));
 	}
-	log_i("停止服务中....\n");
+	log_i(_T("停止服务中....\n"));
 	free(commandLine);
 }
 
@@ -100,7 +102,7 @@ wchar_t * ParseConfForCmd() {
 	FILE * config_file;
 	//打开文件
 	if ((config_file = _tfopen(configFilePath, _T("r"))) == NULL) {
-		log_e("配置文件打开失败!\n");
+		log_e(_T("配置文件打开失败!\n"));
 		exit(EXIT_FAILURE);
 	}
 
@@ -110,14 +112,14 @@ wchar_t * ParseConfForCmd() {
 	//获取文件长度
 	long total_size = ftell(config_file);
 	if (total_size < 0) {
-		log_e("读取配置文件失败!配置文件长度为0\n");
+		log_e(_T("读取配置文件失败!配置文件长度为0\n"));
 		exit(EXIT_FAILURE);
 	}
 	//分配内存
 	char * json_data = malloc(sizeof(char) * total_size + 1);
 
 	if (json_data == NULL) {
-		log_e("读取配置文件失败!分配内存失败\n");
+		log_e(_T("读取配置文件失败!分配内存失败\n"));
 		exit(EXIT_FAILURE);
 	}
 
@@ -136,14 +138,14 @@ wchar_t * ParseConfForCmd() {
 	cJSON *cmd = cJSON_GetObjectItem(json, "cmd");
 
 	if (cmd == NULL) {
-		log_e("无法启动程序,命令行无效!配置中无cmd参数\n");
+		log_e(_T("无法启动程序,命令行无效!配置中无cmd参数\n"));
 		exit(EXIT_FAILURE);
 	}
 
 	//转宽字符
 	wchar_t * commandLine = CharToWchar(cmd->valuestring);
 	if (commandLine == NULL) {
-		log_e("无法启动程序,命令行无效!转宽字节无效\n");
+		log_e(_T("无法启动程序,命令行无效!转宽字节无效\n"));
 		exit(EXIT_FAILURE);
 	}
 
@@ -165,7 +167,7 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 	//获取当前处于活动状态用户的Token
 	if (!WTSQueryUserToken(dwSessionID, &hToken)) {
 		int nCode = GetLastError();
-		log_e("获取用户token失败,错误码:%d\n", nCode);
+		log_e(_T("获取用户token失败,错误码:%d\n"), nCode);
 		CloseHandle(hToken);
 		return FALSE;
 	}
@@ -173,7 +175,7 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 	//复制新的Token
 	if (!DuplicateTokenEx(hToken, MAXIMUM_ALLOWED, NULL, SecurityIdentification, TokenPrimary, &hTokenDup)) {
 		int nCode = GetLastError();
-		log_e("复制用户token失败,错误码:%d\n", nCode);
+		log_e(_T("复制用户token失败,错误码:%d\n"), nCode);
 
 		CloseHandle(hToken);
 		return FALSE;
@@ -182,7 +184,7 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 	//创建环境信息
 	if (!CreateEnvironmentBlock(&pEnv, hTokenDup, FALSE)) {
 		DWORD nCode = GetLastError();
-		log_e("创建环境信息失败,错误码:%d\n", nCode);
+		log_e(_T("创建环境信息失败,错误码:%d\n"), nCode);
 		CloseHandle(hTokenDup);
 		CloseHandle(hToken);
 		return FALSE;
@@ -201,7 +203,7 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 	if (!CreateProcessAsUser(hTokenDup, NULL, commandLine, NULL, NULL, FALSE, dwCreateFlag, pEnv, NULL, &si, &pi))
 	{
 		DWORD nCode = GetLastError();
-		log_e("创建进程失败,错误码:%d\n", nCode);
+		log_e(_T("创建进程失败,错误码:%d\n"), nCode);
 		DestroyEnvironmentBlock(pEnv);
 		CloseHandle(hTokenDup);
 		CloseHandle(hToken);
@@ -213,7 +215,7 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 
 //狗粮快递
 DogFood * CreateDogFood() {
-	log_i("生成狗粮中!\n");
+	log_i(_T("生成狗粮中!\n"));
 	HANDLE hMapFile = CreateFileMapping(
 		INVALID_HANDLE_VALUE,
 		NULL,
@@ -225,7 +227,7 @@ DogFood * CreateDogFood() {
 
 	int rst = GetLastError();
 	if (rst) {
-		log_e("内存申请失败!%d\n", rst);
+		log_e(_T("内存申请失败!%d\n"), rst);
 		return NULL;
 	}
 	//获取狗粮
@@ -243,30 +245,30 @@ void watching(DogFood * dogFood, wchar_t * commandLine) {
 	//初始化狗粮
 	dogFood->status = 0;
 	dogFood->timestamp = 0L;
-	log_i("开门狗程序初始化完毕,等待1分钟进入喂狗流程!\n");
+	log_i(_T("开门狗程序初始化完毕,等待1分钟进入喂狗流程!\n"));
 	//等待1分钟,开始进入喂狗流程
 	Sleep(1000 * 60);
 
 	while (TRUE) {
 
-		log_i("狗饿了!\n");
+		log_i(_T("狗饿了!\n"));
 		//如果狗粮时间戳为0 并且 停止喂狗次数小于10,说明程序初始化失败了,尝试10次,每次等待时间延长一分钟
 		if (dogFood->timestamp == 0L && re_count < 10) {
 			re_count++;
-			log_w("程序初始化失败,第%d次重试!等待%d分钟...\n", re_count, re_count + 1);
+			log_e(_T("程序初始化失败,第%d次重试!等待%d分钟...\n"), re_count, re_count + 1);
 			TerminateProcess(pi.hProcess, 0);
 			createProcess(commandLine);
 			Sleep(1000 * 60 * (re_count + 1));
 		}
 		else if (dogFood->timestamp == 0L && re_count > 10) {
 			//程序任然在初始化的过程中,但已经重试10次了,此时程序可以认为是无法启动
-			log_e("程序无法启动!\n");
+			log_e(_T("程序无法启动!\n"));
 			TerminateProcess(pi.hProcess, 0);
 			break;
 		}
 		else if (dogFood->timestamp == old_timestamp && dogFood->status == 1) {
 			//程序在运行中,但是没有喂狗,重启程序
-			log_w("长时间没有喂狗,程序重启!\n");
+			log_e(_T("长时间没有喂狗,程序重启!\n"));
 			re_count = 0;
 			old_status = 0;
 			old_timestamp = 0L;

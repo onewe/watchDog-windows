@@ -3,6 +3,8 @@
 #include "Service.h"
 #include "watchDogService.h"
 #include "CUtils.h"
+#define LOG_TAG          L"main"
+#include "Logger.h"
 
 extern BOOL(*createProcess)(const wchar_t *);
 
@@ -12,10 +14,11 @@ int wmain(int argc, wchar_t *argv[]) {
 	ERROR_LOG = _tfopen(_T(ERROR_LOG_PATH),_T("w+"));
 	//没有权限,退出程序
 	if (ERROR_LOG == NULL) {
-		_ftprintf(ERROR_LOG, _T("日志文件打开失败,程序退出..."));
+		MessageBox(NULL,_T("日志文件打开失败,程序退出.."),_T("错误"), MB_ICONSTOP);
 		exit(EXIT_FAILURE);
 	}
-	_ftprintf(ERROR_LOG, _T("日志文件打开失败,程序退出..."));
+	//关闭缓冲
+	setbuf(ERROR_LOG, NULL);
 	TCHAR * currentDir = GetFullDir();
 	TCHAR * logPath = _tcscat(currentDir, _T(LOG_PATH));
 	if (_taccess(logPath, 0) != 0) {
@@ -28,13 +31,8 @@ int wmain(int argc, wchar_t *argv[]) {
 		_ftprintf(ERROR_LOG, _T("日志文件无权限访问:%s,程序退出..\n"),logFilePath);
 		exit(EXIT_FAILURE);
 	}
-
-
-	BOOL falg = InitLog();
-	if (!falg) {
-		_ftprintf(ERROR_LOG,_T("日志初始化失败!程序退出..\n"));
-		exit(EXIT_FAILURE);
-	}
+	//关闭缓冲
+	setbuf(DOG_LOG, NULL);
 
 	//-s 代表服务已经安装只需要启动服务即可
 	if ((argc > 1) && ((*argv[1] == L'-' || (*argv[1] == L'/')))) {
@@ -49,15 +47,15 @@ int wmain(int argc, wchar_t *argv[]) {
 		BOOL result = InstallService();
 		if (result) {
 			//服务安装成功
-			log_i("服务安装成功,启动服务中..");
+			log_i(_T("服务安装成功,启动服务中..\n"));
 			createProcess = CreateProcessNoService;
 			Run();
 		}
 		else {
-			log_e("服务安装失败,程序退出..\n");
+			log_e(_T("服务安装失败,程序退出..\n"));
 		}
 	}
-	
+
 	free(logFilePath);
 	return 0;
 

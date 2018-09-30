@@ -1,4 +1,6 @@
 #include "Service.h"
+#define LOG_TAG L"serviceInstall"
+#include "Logger.h"
 
 //运行服务
 void RunService() {
@@ -9,8 +11,6 @@ void RunService() {
 	ServiceTable[1].lpServiceProc = NULL;
 	StartServiceCtrlDispatcher(ServiceTable);
 }
-
-
 
 
 //判断是否已经安装过服务
@@ -30,16 +30,16 @@ BOOL IsInstalled() {
 
 //安装服务
 BOOL InstallService() {
-	log_i("安装服务中...");
+	log_i(_T("安装服务中...\n"));
 	if (IsInstalled()) {
-		log_i("服务已安装...");
+		log_i(_T("服务已安装...\n"));
 		return FALSE;
 	}
 
 	//打开服务控制器
 	SC_HANDLE hScm = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
 	if (hScm == NULL) {
-		log_e("打开服务控制器失败...");
+		log_e(_T("打开服务控制器失败...\n"));
 		return FALSE;
 	}
 	TCHAR * path = GetFullPath();
@@ -59,7 +59,7 @@ BOOL InstallService() {
 		NULL,
 		NULL);
 	if (hService == NULL){
-		log_e("服务创建失败...");
+		log_e(_T("服务创建失败...\n"));
 		return FALSE;
 	}
 	//释放句柄
