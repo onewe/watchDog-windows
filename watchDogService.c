@@ -75,23 +75,23 @@ void WINAPI ServiceCtrlHandler(DWORD fdwControl)
 //运行指定程序
 void Run() {
 	log_i(_T("服务调用成功!\n"));
-	wchar_t * commandLine = ParseConfForCmd();
-	BOOL flag = createProcess(commandLine);
-	if (TRUE) {
-		DogFood * dogFood = CreateDogFood();
-		if (dogFood == NULL) {
-			log_e(_T("狗粮生产失败!\n"));
-		}
-		else {
-			//看门
-			watching(dogFood, commandLine);
-		}
+	DogFood * dogFood = CreateDogFood();
+	log_i(_T("狗粮状态码:%d\n"),GetLastError());
+	if (dogFood == NULL) {
+		log_e(_T("狗粮生产失败!\n"));
 	}
 	else {
-		log_e(_T("程序启动失败!\n"));
+		wchar_t * commandLine = ParseConfForCmd();
+		BOOL flag = createProcess(commandLine);
+		if (flag) {
+			watching(dogFood, commandLine);
+		}
+		else {
+			log_e(_T("程序启动失败!\n"));
+		}
+		free(commandLine);
 	}
 	log_i(_T("停止服务中....\n"));
-	free(commandLine);
 }
 
 //解析配置文件
@@ -156,12 +156,13 @@ wchar_t * ParseConfForCmd() {
 }
 
 BOOL CreateProcessNoService(const wchar_t * commandLine) {
+	log_i(_T("创建进程中.....\n"));
 	return  CreateProcess(NULL, commandLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
 }
 
 //服务环境下创建进程
 BOOL CreateProcessForService(const wchar_t * commandLine) {
-
+	log_i(_T("创建进程中.....\n"));
 	DWORD dwSessionID = WTSGetActiveConsoleSessionId();
 
 	//获取当前处于活动状态用户的Token
@@ -200,7 +201,7 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 	DWORD dwCreateFlag = NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE | CREATE_UNICODE_ENVIRONMENT;
 
 
-	if (!CreateProcessAsUser(hTokenDup, NULL, commandLine, NULL, NULL, FALSE, dwCreateFlag, pEnv, NULL, &si, &pi))
+	if (!CreateProcessAsUser(hTokenDup, NULL, commandLine, NULL, NULL, FALSE, dwCreateFlag, pEnv, GetFullDir(), &si, &pi))
 	{
 		DWORD nCode = GetLastError();
 		log_e(_T("创建进程失败,错误码:%d\n"), nCode);
@@ -216,14 +217,37 @@ BOOL CreateProcessForService(const wchar_t * commandLine) {
 //狗粮快递
 DogFood * CreateDogFood() {
 	log_i(_T("生成狗粮中!\n"));
+
+	PSECURITY_DESCRIPTOR pSec = (PSECURITY_DESCRIPTOR)LocalAlloc(LMEM_FIXED, SECURITY_DESCRIPTOR_MIN_LENGTH);
+	if (!pSec)
+	{
+		return GetLastError();
+	}
+	if (!InitializeSecurityDescriptor(pSec, SECURITY_DESCRIPTOR_REVISION))
+	{
+		LocalFree(pSec);
+		return GetLastError();
+	}
+	if (!SetSecurityDescriptorDacl(pSec, TRUE, NULL, TRUE))
+	{
+		LocalFree(pSec);
+		return GetLastError();
+	}
+	SECURITY_ATTRIBUTES attr;
+	attr.bInheritHandle = FALSE;
+	attr.lpSecurityDescriptor = pSec;
+	attr.nLength = sizeof(SECURITY_ATTRIBUTES);
+
+
 	HANDLE hMapFile = CreateFileMapping(
 		INVALID_HANDLE_VALUE,
-		NULL,
+		&attr,
 		PAGE_READWRITE,
 		0,
 		sizeof(DogFood),
 		Memory_Name
 	);
+	LocalFree(pSec);
 
 	int rst = GetLastError();
 	if (rst) {
@@ -232,6 +256,9 @@ DogFood * CreateDogFood() {
 	}
 	//获取狗粮
 	DogFood * dogFood = MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(DogFood));
+	//初始化
+	dogFood->status = -1;
+	dogFood->timestamp = 1000L;
 	return dogFood;
 }
 
@@ -274,16 +301,21 @@ void watching(DogFood * dogFood, wchar_t * commandLine) {
 			old_timestamp = 0L;
 			dogFood->status = 0;
 			dogFood->timestamp = 0L;
-
 			TerminateProcess(pi.hProcess, 0);
+			int errorCode = GetLastError();
+			if (errorCode) {
+				log_e(_T("结束进程失败,%d\n"),errorCode);
+			}
+			Sleep(1000 * 10);
 			createProcess(commandLine);
 			Sleep(1000 * 60);
 
 		}
 		else {
+			log_i(_T("喂狗成功!状态码:%d    时间戳:%ld\n"),dogFood->status,dogFood->timestamp);
 			old_status = dogFood->status;
 			old_timestamp = dogFood->timestamp;
-			Sleep(1000 * 10);
+			Sleep(1000 * 60);
 		}
 
 	}

@@ -11,24 +11,16 @@ extern BOOL(*createProcess)(const wchar_t *);
 
 int wmain(int argc, wchar_t *argv[]) {
 	setlocale(LC_ALL, "chs");
-	ERROR_LOG = _tfopen(_T(ERROR_LOG_PATH),_T("w+"));
-	//没有权限,退出程序
-	if (ERROR_LOG == NULL) {
-		MessageBox(NULL,_T("日志文件打开失败,程序退出.."),_T("错误"), MB_ICONSTOP);
-		exit(EXIT_FAILURE);
-	}
-	//关闭缓冲
-	setbuf(ERROR_LOG, NULL);
 	TCHAR * currentDir = GetFullDir();
 	TCHAR * logPath = _tcscat(currentDir, _T(LOG_PATH));
 	if (_taccess(logPath, 0) != 0) {
-		_ftprintf(ERROR_LOG, _T("日志目录不存在:%s,程序退出\n"),logPath);
+		MessageBox(NULL, _T("日志目录不存在,程序退出.."), _T("错误"), MB_ICONSTOP);
 		exit(EXIT_FAILURE);
 	}
 	TCHAR * logFilePath = _tcscat(currentDir, _T(LOG_FILE_PATH));
 	DOG_LOG = _tfopen(logFilePath, _T("w+"), stdout);
 	if (DOG_LOG == NULL) {
-		_ftprintf(ERROR_LOG, _T("日志文件无权限访问:%s,程序退出..\n"),logFilePath);
+		MessageBox(NULL, _T("日志文件无权限访问,程序退出.."), _T("错误"), MB_ICONSTOP);
 		exit(EXIT_FAILURE);
 	}
 	//关闭缓冲

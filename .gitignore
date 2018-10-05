@@ -2,6 +2,7 @@
 /logs/
 /Release/
 /x64/
+/.vs/
 # Prerequisites
 *.d
 
