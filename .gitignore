@@ -30,7 +30,6 @@
 *.la
 *.a
 *.lib
-
 # Executables
 *.exe
 *.out
