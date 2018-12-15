@@ -40,6 +40,12 @@
     <Filter Include="源文件\logger">
       <UniqueIdentifier>{b1f16aec-3d76-477c-8d06-2386e99f9026}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\base64">
+      <UniqueIdentifier>{1ba87dc9-0419-40f8-8e5a-aeaf54851c16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\base64">
+      <UniqueIdentifier>{0759a19d-ac96-481a-bc61-9e257b2dea8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -62,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="Logger.c">
       <Filter>源文件\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="base64.c">
+      <Filter>源文件\base64</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,5 +100,21 @@
     <ClInclude Include="Logger.h">
       <Filter>头文件\logger</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
+      <Filter>头文件\base64</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="watchdog.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="IPC.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

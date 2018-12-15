@@ -14,10 +14,13 @@
 #define CONFIG_FILE_PATH  "/conf/config.json"
 //日志路径
 #define LOG_PATH  "/logs/"
+#define LOG_DIR_NAME "logs"
 //日志文件名称
 #define LOG_FILE_PATH "log.log"
 //错误日志路径
 #define ERROR_LOG_PATH "C:\\watch_dog_error.log"
+//错误日志文件对象
+FILE * ERROR_LOG;
 //日志文件对象
 FILE * DOG_LOG;
 #endif // !Common_H

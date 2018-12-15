@@ -1,5 +1,6 @@
 #include <UserEnv.h>
 #include <WtsApi32.h>
+#include <sddl.h>
 #include "lib/cjson/cJSON.h"
 #define LOG_TAG    "dogService"
 #include "CUtils.h"
@@ -14,7 +15,7 @@ typedef struct DogFood {
 	//程序运行状态
 	char status;
 	//时间戳
-	long timestamp;
+	long long timestamp;
 }DogFood;
 //用于创建进程的函数指针
 BOOL(*createProcess)(const wchar_t *);
@@ -35,6 +36,8 @@ wchar_t * ParseConfForCmd();
 BOOL CreateProcessForService(const wchar_t *);
 //创建进程在非服务运行的环境下
 BOOL CreateProcessNoService(const wchar_t *);
+//设置全局访问权限
+//BOOL SetPrivilege(HANDLE hToken, LPCTSTR lpszPrivilege, BOOL bEnablePrivilege);
 //搞点狗粮
 DogFood * CreateDogFood();
 //看门

@@ -143,10 +143,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="base64.c" />
     <ClCompile Include="CUtils.c" />
     <ClCompile Include="lib\cjson\cJSON.c" />
     <ClCompile Include="lib\cjson\cJSON_Utils.c" />
@@ -159,13 +159,21 @@
     <None Include="conf\config.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base64.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="CUtils.h" />
     <ClInclude Include="lib\cjson\cJSON.h" />
     <ClInclude Include="lib\cjson\cJSON_Utils.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="watchDogService.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="watchdog.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="IPC.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
