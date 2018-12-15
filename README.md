@@ -33,7 +33,7 @@ typedef struct DogFood {
 
 ```json
 {
-  "cmd":"calc"
+  "cmd":"命令行base64编码"
 }
 ```
 
